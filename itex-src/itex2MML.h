@@ -13,6 +13,9 @@ extern "C" {
 
   /* Step 1. Parse a buffer with itex source; return value is mathml, or 0 on failure (e.g., parse error).
    */
+  const int set_javascript();// itex2MML.y can read this variable
+  const char * read_fontsize(); // itex2MML.y may use this from itex2MML.cc to read string "fontsize"
+  const char * read_mathml_id(); // itex2MML.y may use this from itex2MML.cc to read string "mathml_id"
   extern char * itex2MML_parse (const char * buffer, unsigned long length);
 
   /* Step 2. Free the string from Step 1.
@@ -26,6 +29,7 @@ extern "C" {
 
   extern int    itex2MML_html_filter (const char * buffer, unsigned long length);
   extern int    itex2MML_strict_html_filter (const char * buffer, unsigned long length);
+  extern int  itex2MML_do_html_filter (const char * buffer, unsigned long length, const int forbid_markup);
 
 
   /* To change output methods:
@@ -56,6 +60,8 @@ extern "C" {
   extern int    itex2MML_rowposn;
   extern int    itex2MML_displaymode;
 
+  extern char * itex2MML_remove_char(char * str , char * c);
+  extern void replace_str(const char *str, const char *old, const char *newer);
 #ifdef __cplusplus
 }
 #endif

@@ -1,6 +1,9 @@
 /*             itex2MML 1.4.8
  *   itex2MML.y last modified 9/21/2011
  */
+/** wims_mathml.y last modified 10/27/2017 (r.9976) **/
+
+%parse-param {char **ret_str}
 
 %{
 #include <stdio.h>
@@ -10,30 +13,25 @@
 #include "itex2MML.h"
 
 #define YYSTYPE char *
-#define YYPARSE_PARAM_TYPE char **
-#define YYPARSE_PARAM ret_str
 
 #define yytext itex2MML_yytext
-
  extern int yylex ();
-
  extern char * yytext;
 
  static void itex2MML_default_error (const char * msg)
-   {
-     if (msg)
-       fprintf(stderr, "Line: %d Error: %s\n", itex2MML_lineno, msg);
-   }
+  {
+//   if (msg){ fprintf(stderr, "Line: %d Error: %s\n", itex2MML_lineno, msg);}
+  }
 
  void (*itex2MML_error) (const char * msg) = itex2MML_default_error;
 
- static void yyerror (char * s)
+ static void yyerror (char ** ret_str, char * s)
    {
-     char * msg = itex2MML_copy3 (s, " at token ", yytext);
-     if (itex2MML_error)
-       (*itex2MML_error) (msg);
-     itex2MML_free_string (msg);
-   }
+//    char * msg = itex2MML_copy3 (s, " at token ", yytext);
+    if (itex2MML_error)
+      (*itex2MML_error) ("ERROR");
+//     itex2MML_free_string (msg);
+  }
 
  /* Note: If length is 0, then buffer is treated like a string; otherwise only length bytes are written.
   */
@@ -160,6 +158,103 @@
        }
      return copy ? copy : itex2MML_empty_string;
    }
+/* wims */
+ char * itex2MML_copy5 (const char * first, const char * second, const char * third ,const char * forth,const char * fifth)
+   {
+     int  first_length =  first ? strlen( first) : 0;
+     int second_length = second ? strlen(second) : 0;
+     int  third_length =  third ? strlen( third) : 0;
+     int  forth_length =  forth ? strlen( forth) : 0;
+     int  fifth_length =  fifth ? strlen( fifth) : 0;
+
+     char * copy = (char *) malloc(first_length + second_length + third_length + forth_length + fifth_length + 1);
+
+     if (copy)
+       {
+ if (first)
+   strcpy(copy, first);
+ else
+   copy[0] = 0;
+
+ if (second) strcat(copy, second);
+ if ( third) strcat(copy,  third);
+ if ( forth) strcat(copy,  forth);
+ if ( fifth) strcat(copy,  fifth);
+       }
+     return copy ? copy : itex2MML_empty_string;
+   }
+
+ char * itex2MML_copy7 (const char * first, const char * second, const char * third ,const char * forth,const char * fifth , const char * six , const char * seven)
+   {
+     int  first_length =  first ? strlen( first) : 0;
+     int second_length = second ? strlen(second) : 0;
+     int  third_length =  third ? strlen( third) : 0;
+     int  forth_length =  forth ? strlen( forth) : 0;
+     int  fifth_length =  fifth ? strlen( fifth) : 0;
+     int  six_length =  six ? strlen( six ) : 0;
+     int  seven_length =  seven ? strlen( seven ) : 0;
+
+     char * copy = (char *) malloc(first_length + second_length + third_length + forth_length + fifth_length + six_length + seven_length + 1);
+
+     if (copy)
+       {
+ if (first)
+   strcpy(copy, first);
+ else
+   copy[0] = 0;
+
+ if (second) strcat(copy, second);
+ if ( third) strcat(copy,  third);
+ if ( forth) strcat(copy,  forth);
+ if ( fifth) strcat(copy,  fifth);
+ if ( six) strcat(copy,  six);
+ if ( seven) strcat(copy,  seven);
+       }
+     return copy ? copy : itex2MML_empty_string;
+   }
+
+ char * itex2MML_copy13( const char * A , const char * B , const char * C , const char * D , const char * E , const char * F , const char * G , const char * H,  const char * I,  const char * J,  const char * K,  const char * L,  const char * M){
+     int  A_length =  A ? strlen( A ) : 0;
+     int  B_length =  B ? strlen( B ) : 0;
+     int  C_length =  C ? strlen( C ) : 0;
+     int  D_length =  D ? strlen( D ) : 0;
+     int  E_length =  E ? strlen( E ) : 0;
+     int  F_length =  F ? strlen( F ) : 0;
+     int  G_length =  G ? strlen( G ) : 0;
+     int  H_length =  H ? strlen( H ) : 0;
+     int  I_length =  I ? strlen( I ) : 0;
+     int  J_length =  J ? strlen( J ) : 0;
+     int  K_length =  K ? strlen( K ) : 0;
+     int  L_length =  L ? strlen( L ) : 0;
+     int  M_length =  M ? strlen( M ) : 0;
+
+     char * copy = (char *) malloc(A_length + B_length +   C_length +   D_length +   E_length +   F_length +   G_length +   H_length +   I_length +   J_length +   K_length +   L_length +   M_length + 1 );
+
+     if (copy)
+       {
+ if (A)
+   strcpy(copy, A);
+ else
+   copy[0] = 0;
+
+ if (B) strcat(copy, B);
+ if (C) strcat(copy, C);
+ if (D) strcat(copy, D);
+ if (E) strcat(copy, E);
+ if (F) strcat(copy, F);
+ if (G) strcat(copy, G);
+ if (H) strcat(copy, H);
+ if (I) strcat(copy, I);
+ if (J) strcat(copy, J);
+ if (K) strcat(copy, K);
+ if (L) strcat(copy, L);
+ if (M) strcat(copy, M);
+       }
+     return copy ? copy : itex2MML_empty_string;
+   }
+
+
+
 
  /* Create a copy of a string, appending a second string
   */
@@ -277,7 +372,7 @@
 %}
 
 %left TEXOVER TEXATOP
-%token CHAR STARTMATH STARTDMATH ENDMATH MI MIB MN MO SUP SUB MROWOPEN MROWCLOSE LEFT RIGHT BIG BBIG BIGG BBIGG BIGL BBIGL BIGGL BBIGGL FRAC TFRAC OPERATORNAME MATHOP MATHBIN MATHREL MOP MOL MOLL MOF MOR PERIODDELIM OTHERDELIM LEFTDELIM RIGHTDELIM MOS MOB SQRT ROOT BINOM TBINOM UNDER OVER OVERBRACE UNDERLINE UNDERBRACE UNDEROVER TENSOR MULTI ARRAYALIGN COLUMNALIGN ARRAY COLSEP ROWSEP ARRAYOPTS COLLAYOUT COLALIGN ROWALIGN ALIGN EQROWS EQCOLS ROWLINES COLLINES FRAME PADDING ATTRLIST ITALICS BOLD BOXED SLASHED RM BB ST END BBLOWERCHAR BBUPPERCHAR BBDIGIT CALCHAR FRAKCHAR CAL FRAK CLAP LLAP RLAP ROWOPTS TEXTSIZE SCSIZE SCSCSIZE DISPLAY TEXTSTY TEXTBOX TEXTSTRING XMLSTRING CELLOPTS ROWSPAN COLSPAN THINSPACE MEDSPACE THICKSPACE QUAD QQUAD NEGSPACE PHANTOM HREF UNKNOWNCHAR EMPTYMROW STATLINE TOOLTIP TOGGLE FGHIGHLIGHT BGHIGHLIGHT SPACE INTONE INTTWO INTTHREE BAR WIDEBAR VEC WIDEVEC HAT WIDEHAT CHECK WIDECHECK TILDE WIDETILDE DOT DDOT DDDOT DDDDOT UNARYMINUS UNARYPLUS BEGINENV ENDENV MATRIX PMATRIX BMATRIX BBMATRIX VMATRIX VVMATRIX SVG ENDSVG SMALLMATRIX CASES ALIGNED GATHERED SUBSTACK PMOD RMCHAR COLOR BGCOLOR XARROW OPTARGOPEN OPTARGCLOSE ITEXNUM RAISEBOX NEG
+%token TMP_FONTSIZE LARGERINT BIGINT BIGGINT BIGGGINT CHAR STARTMATH STARTDMATH ENDMATH MI MIB MN MO SUP SUB MROWOPEN MROWCLOSE LEFT RIGHT BIG BBIG BIGG BBIGG BIGL BBIGL BIGGL BBIGGL DFRAC FRAC TFRAC SFRAC OPERATORNAME MATHOP MATHBIN MATHREL MOP MOL MOLL MOF MOR PERIODDELIM OTHERDELIM LEFTDELIM RIGHTDELIM MOS MOB SQRT ROOT BINOM BINOM2 TBINOM UNDER OVER OVERBRACE UNDERLINE UNDERBRACE UNDEROVER TENSOR MULTI ARRAYALIGN TEX_OPTIONS ARRAY COLSEP ROWSEP ARRAYOPTS COLLAYOUT COLALIGN ROWALIGN ALIGN EQROWS EQCOLS ROWLINES COLLINES FRAME PADDING ATTRLIST ITALICS BOLD BOXED SLASHED RM WIMSROMAN BB ST END BBLOWERCHAR BBUPPERCHAR BBDIGIT CALCHAR FRAKCHAR CAL FRAK CLAP LLAP RLAP ROWOPTS TEXTSIZE SCSIZE SCSCSIZE DISPLAY TEXTSTY TEXTBOX TEXTSTRING XMLSTRING CELLOPTS ROWSPAN COLSPAN THINSPACE MEDSPACE THICKSPACE QUAD QQUAD NEGSPACE PHANTOM HREF UNKNOWNCHAR EMPTYMROW STATLINE TOOLTIP TOGGLE FGHIGHLIGHT BGHIGHLIGHT SPACE INTONE INTTWO INTTHREE BAR WIDEBAR VEC WIDEVEC OVERARROW UNDERARROW HAT WIDEHAT CHECK WIDECHECK TILDE WIDETILDE ACCENTS DOT DDOT DDDOT DDDDOT UNARYMINUS UNARYPLUS BEGINENV ENDENV EQUATION MATRIX PMATRIX BMATRIX BBMATRIX VMATRIX VVMATRIX SVG ENDSVG HTML ENDHTML SMALLMATRIX CASES ALIGNED GATHERED SUBSTACK PMOD RMCHAR COLOR SPECIAL INPUT BGCOLOR XARROW OPTARGOPEN OPTARGCLOSE ITEXNUM RAISEBOX NEG
 
 %%
 
@@ -296,7 +391,14 @@ expression: STARTMATH ENDMATH {/* empty math group - ignore*/}
 | STARTDMATH ENDMATH {/* ditto */}
 | STARTMATH compoundTermList ENDMATH {
   char ** r = (char **) ret_str;
-  char * s = itex2MML_copy3("<math xmlns='http://www.w3.org/1998/Math/MathML' display='inline'>", $2, "</math>");
+  char *s;
+  if( set_javascript() == 1){
+   s = itex2MML_copy7("<span class=\"itex2MML\" onclick=\"javascript:itex2MML_zoom('",read_mathml_id(),"')\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mstyle id=\"", read_mathml_id() ,"\" mathsize=\"100%%\">", $2, "</mstyle></math></span>");
+  }
+  else
+  {
+    s = itex2MML_copy7("<span class=\"itex2MML\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mstyle id=\"", read_mathml_id() ,"\" mathsize=\"",read_fontsize(),"\">", $2, "</mstyle></math></span>");
+  }
   itex2MML_free_string($2);
   if (r) {
     (*r) = (s == itex2MML_empty_string) ? 0 : s;
@@ -309,7 +411,14 @@ expression: STARTMATH ENDMATH {/* empty math group - ignore*/}
 }
 | STARTDMATH compoundTermList ENDMATH {
   char ** r = (char **) ret_str;
-  char * s = itex2MML_copy3("<math xmlns='http://www.w3.org/1998/Math/MathML' display='block'>", $2, "</math>");
+  char *s;
+  if( set_javascript() == 1){
+   s = itex2MML_copy7("<span style=\"font-size:1em;\" onclick=\"javascript:itex2MML_zoom('",read_mathml_id(),"')\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mstyle id=\"", read_mathml_id() ,"\" mathsize=\"100%%\">", $2, "</mstyle></math></span>");
+  }
+  else
+  {
+    s = itex2MML_copy7("<span style=\"font-size:1em;\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mstyle id=\"", read_mathml_id() ,"\" mathsize=\"",read_fontsize(),"\">", $2, "</mstyle></math></span>");
+  }
   itex2MML_free_string($2);
   if (r) {
     (*r) = (s == itex2MML_empty_string) ? 0 : s;
@@ -505,6 +614,11 @@ compoundTerm: mob SUB closedTerm SUP closedTerm {
   $$ = itex2MML_copy3("<msup><mo></mo>", $2, "</msup>");
   itex2MML_free_string($2);
 }
+| TMP_FONTSIZE compoundTerm {
+  $$ = itex2MML_copy5("<mstyle mathsize=\"",$1,"\">",$2,"</mstyle>");
+  itex2MML_free_string($1);
+  itex2MML_free_string($2);
+}
 | closedTerm {
   $$ = itex2MML_copy_string($1);
   itex2MML_free_string($1);
@@ -534,6 +648,8 @@ closedTerm: array
 | mover
 | bar
 | vec
+| overarrow
+| underarrow
 | hat
 | dot
 | ddot
@@ -541,6 +657,7 @@ closedTerm: array
 | ddddot
 | check
 | tilde
+| accents
 | moverbrace
 | munderbrace
 | munderline
@@ -579,6 +696,9 @@ closedTerm: array
 | fghighlight
 | bghighlight
 | color
+| special
+| input
+| bigint
 | texover
 | texatop
 | MROWOPEN closedTerm MROWCLOSE {
@@ -604,12 +724,12 @@ closedTerm: array
 
 left: LEFT LEFTDELIM {
   itex2MML_rowposn = 2;
-  $$ = itex2MML_copy3("<mo>", $2, "</mo>");
+  $$ = itex2MML_copy3("<mo stretchy=\"true\">", $2, "</mo>");
   itex2MML_free_string($2);
 }
 | LEFT OTHERDELIM {
   itex2MML_rowposn = 2;
-  $$ = itex2MML_copy3("<mo>", $2, "</mo>");
+  $$ = itex2MML_copy3("<mo stretchy=\"true\">", $2, "</mo>");
   itex2MML_free_string($2);
 }
 | LEFT PERIODDELIM {
@@ -619,16 +739,34 @@ left: LEFT LEFTDELIM {
 };
 
 right: RIGHT RIGHTDELIM {
-  $$ = itex2MML_copy3("<mo>", $2, "</mo>");
+  $$ = itex2MML_copy3("<mo stretchy=\"true\">", $2, "</mo>");
   itex2MML_free_string($2);
 }
 | RIGHT OTHERDELIM {
-  $$ = itex2MML_copy3("<mo>", $2, "</mo>");
+  $$ = itex2MML_copy3("<mo stretchy=\"true\">", $2, "</mo>");
   itex2MML_free_string($2);
 }
 | RIGHT PERIODDELIM {
   $$ = itex2MML_copy_string("");
   itex2MML_free_string($2);
+};
+
+
+bigint:  BIGGGINT {
+  itex2MML_rowposn = 2;
+  $$ = itex2MML_copy_string("<mtable columnalign=\"center\" rowspacing=\"0.5ex\"><mtr><mtd><mo symmetric=\"true\"  stretchy=\"true\"  maxsize=\"600%\" minsize=\"400%\">&Integral;</mo></mtd></mtr></mtable>");
+}
+| BIGGINT {
+  itex2MML_rowposn = 2;
+  $$ = itex2MML_copy_string("<mtable columnalign=\"center\" rowspacing=\"0.5ex\"><mtr><mtd><mo symmetric=\"true\"  stretchy=\"true\"  maxsize=\"400%\" minsize=\"30%\">&Integral;</mo></mtd></mtr></mtable>");
+}
+| BIGINT {
+  itex2MML_rowposn = 2;
+  $$ = itex2MML_copy_string("<mtable columnalign=\"center\" rowspacing=\"0.5ex\"><mtr><mtd><mo symmetric=\"true\"  stretchy=\"true\"  maxsize=\"300%\" minsize=\"200%\">&Integral;</mo></mtd></mtr></mtable>");
+}
+| LARGERINT {
+  itex2MML_rowposn = 2;
+  $$ = itex2MML_copy_string("<mtable columnalign=\"center\" rowspacing=\"0.5ex\"><mtr><mtd><mo symmetric=\"true\"  stretchy=\"true\"  maxsize=\"260%\" minsize=\"160%\">&Integral;</mo></mtd></mtr></mtable>");
 };
 
 bigdelim: BIG LEFTDELIM {
@@ -867,7 +1005,7 @@ toggle: TOGGLE closedTerm closedTerm {
 };
 
 fghighlight: FGHIGHLIGHT ATTRLIST closedTerm {
-  char * s1 = itex2MML_copy3("<maction actiontype=\"highlight\" other='color=", $2, "'>");
+  char * s1 = itex2MML_copy3("<maction actiontype=\"highlight\" other=\"color=", $2, "\">");
   $$ = itex2MML_copy3(s1, $3, "</maction>");
   itex2MML_free_string(s1);
   itex2MML_free_string($2);
@@ -875,7 +1013,7 @@ fghighlight: FGHIGHLIGHT ATTRLIST closedTerm {
 };
 
 bghighlight: BGHIGHLIGHT ATTRLIST closedTerm {
-  char * s1 = itex2MML_copy3("<maction actiontype=\"highlight\" other='background=", $2, "'>");
+  char * s1 = itex2MML_copy3("<maction actiontype=\"highlight\" other=\"background=", $2, "\">");
   $$ = itex2MML_copy3(s1, $3, "</maction>");
   itex2MML_free_string(s1);
   itex2MML_free_string($2);
@@ -891,6 +1029,81 @@ color: COLOR ATTRLIST compoundTermList {
 }
 | BGCOLOR ATTRLIST compoundTermList {
   char * s1 = itex2MML_copy3("<mstyle mathbackground=", $2, ">");
+  $$ = itex2MML_copy3(s1, $3, "</mstyle>");
+  itex2MML_free_string(s1);
+  itex2MML_free_string($2);
+  itex2MML_free_string($3);
+};
+
+
+input: INPUT {
+    int len = strlen(yylval);
+    char size[len];
+    char id[len];
+    char style[len];
+    char value[len];
+    char readonly[len];
+    memset(size,'\0',len);
+    memset(id,'\0',len);
+    memset(value,'\0',len);
+    memset(style,'\0',len);
+    memset(readonly,'\0',len);
+    int found_left = 0;
+    int found_right = 0;
+    int cnt=0;
+    char tmp[2];
+    int i;
+    for(i = 0 ; i < len ; i++){
+  if( yylval[i] == '{' ){
+          found_left=1;found_right=0;
+  }
+  else
+  {
+          if( yylval[i] == '}' ){
+      cnt++;found_left=0;found_right=1;
+          }
+          else
+          {
+    if(found_left == 1 && found_right == 0){
+            tmp[0] = yylval[i];
+            tmp[1] = '\0';
+            switch (cnt){
+          case 0 : strncat(size,tmp,1);break;
+          case 1 : strncat(id,tmp,1);break;
+          case 2 : strncat(style,tmp,1);break;
+          case 3 : strncat(value,tmp,1);break;
+          case 4 : strncat(readonly,tmp,1);break;
+          default : break;
+            }
+    }
+          }
+  }
+    }
+    $1 = itex2MML_copy_string(size);
+    char * s1 = itex2MML_copy3("<semantics><annotation-xml encoding=\"application/xhtml+xml\"><textarea xmlns=\"http://www.w3.org/1999/xhtml\"  onkeydown=\"return (event.keyCode!=13);\" cols=\"",$1,"\" rows=\"1\" id=\"mathml");
+    $1 = itex2MML_copy_string(id);
+    s1 = itex2MML_copy3(s1,$1,"\" style=\"vertical-align:middle;overflow:hidden;resize:none;font-size:1.0em;");
+    if( strstr(readonly,"1") != NULL){
+        $1 = itex2MML_copy_string(style);
+        s1 = itex2MML_copy3(s1,$1,"\" ");
+        s1 = itex2MML_copy2(s1," readonly=\"readonly\">");
+    }
+    else
+    {
+        $1 = itex2MML_copy_string(style);
+        s1 = itex2MML_copy3(s1,$1,"\">");
+    }
+    $1 = itex2MML_copy_string(value);
+    s1 = itex2MML_copy3(s1,$1,"</textarea></annotation-xml></semantics>");
+    $$ = itex2MML_copy_string(s1);
+    itex2MML_free_string(s1);
+    itex2MML_free_string($1);
+
+
+};
+
+special: SPECIAL ATTRLIST compoundTermList {
+  char * s1 = itex2MML_copy3("<mstyle mathcolor=", $2, ">");
   $$ = itex2MML_copy3(s1, $3, "</mstyle>");
   itex2MML_free_string(s1);
   itex2MML_free_string($2);
@@ -965,6 +1178,11 @@ bold: BOLD closedTerm {
 roman: RM ST rmchars END {
   $$ = itex2MML_copy3("<mi mathvariant=\"normal\">", $3, "</mi>");
   itex2MML_free_string($3);
+};
+
+roman: WIMSROMAN closedTerm{
+  $$ = itex2MML_copy3("<mi mathvariant=\"normal\">", $2, "</mi>");
+  itex2MML_free_string($2);
 };
 
 rmchars: RMCHAR {
@@ -1157,9 +1375,16 @@ subsupTerm: SUB closedTerm SUP closedTerm {
   itex2MML_free_string($3);
 };
 
-mfrac: FRAC closedTerm closedTerm {
-  char * s1 = itex2MML_copy3("<mfrac>", $2, $3);
-  $$ = itex2MML_copy2(s1, "</mfrac>");
+mfrac: DFRAC closedTerm closedTerm {
+  char * s1 = itex2MML_copy3("<mstyle displaystyle=\"true\" fontsize=\"120%\"><mfrac>", $2, $3);
+  $$ = itex2MML_copy2(s1, "</mfrac></mstyle>");
+  itex2MML_free_string(s1);
+  itex2MML_free_string($2);
+  itex2MML_free_string($3);
+}
+| FRAC closedTerm closedTerm {
+  char * s1 = itex2MML_copy3("<mstyle displaystyle=\"true\"><mfrac>", $2, $3);
+  $$ = itex2MML_copy2(s1, "</mfrac></mstyle>");
   itex2MML_free_string(s1);
   itex2MML_free_string($2);
   itex2MML_free_string($3);
@@ -1170,24 +1395,36 @@ mfrac: FRAC closedTerm closedTerm {
   itex2MML_free_string(s1);
   itex2MML_free_string($2);
   itex2MML_free_string($3);
+}
+| SFRAC closedTerm closedTerm{
+  $$ = itex2MML_copy5("<mstyle scriptlevel=\"1\"><msup><mrow/>",$2,"</msup><msub><mo lspace=\"verythinmathspace\" stretchy=\"true\">&#x2571;</mo>",$3,"</msub></mstyle>");
+  itex2MML_free_string($2);
+  itex2MML_free_string($3);
 };
 
 pmod: PMOD closedTerm {
   $$ = itex2MML_copy3( "<mo lspace=\"mediummathspace\">(</mo><mo rspace=\"thinmathspace\">mod</mo>", $2, "<mo rspace=\"mediummathspace\">)</mo>");
   itex2MML_free_string($2);
-}
+};
 
-texover: MROWOPEN compoundTermList TEXOVER compoundTermList MROWCLOSE {
-  char * s1 = itex2MML_copy3("<mfrac><mrow>", $2, "</mrow><mrow>");
-  $$ = itex2MML_copy3(s1, $4, "</mrow></mfrac>");
+texover: MROWOPEN compoundTermList BINOM2 compoundTermList MROWCLOSE {
+  char * s1 = itex2MML_copy3("<mrow><mo>(</mo><mfrac linethickness=\"0\">", $2, $4);
+  $$ = itex2MML_copy2(s1,"</mfrac><mo>)</mo></mrow>");
+  itex2MML_free_string(s1);
+  itex2MML_free_string($2);
+  itex2MML_free_string($4);
+}
+| MROWOPEN compoundTermList TEXOVER compoundTermList MROWCLOSE {
+  char * s1 = itex2MML_copy3("<mstyle displaystyle=\"true\"><mfrac><mrow>", $2, "</mrow><mrow>");
+  $$ = itex2MML_copy3(s1, $4, "</mrow></mfrac></mstyle>");
   itex2MML_free_string(s1);
   itex2MML_free_string($2);
   itex2MML_free_string($4);
 }
 | left compoundTermList TEXOVER compoundTermList right {
-  char * s1 = itex2MML_copy3("<mrow>", $1, "<mfrac><mrow>");
+  char * s1 = itex2MML_copy3("<mrow>", $1, "<mstyle displaystyle=\"true\"><mfrac><mrow>");
   char * s2 = itex2MML_copy3($2, "</mrow><mrow>", $4);
-  char * s3 = itex2MML_copy3("</mrow></mfrac>", $5, "</mrow>");
+  char * s3 = itex2MML_copy3("</mrow></mfrac></mstyle>", $5, "</mrow>");
   $$ = itex2MML_copy3(s1, s2, s3);
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1254,7 +1491,7 @@ bar: BAR closedTerm {
   itex2MML_free_string($2);
 }
 | WIDEBAR closedTerm {
-  $$ = itex2MML_copy3("<mover>", $2, "<mo>&#x000AF;</mo></mover>");
+  $$ = itex2MML_copy3("<mover>", $2, "<mo> &#x000AF; </mo></mover>");
   itex2MML_free_string($2);
 };
 
@@ -1264,6 +1501,18 @@ vec: VEC closedTerm {
 }
 | WIDEVEC closedTerm {
   $$ = itex2MML_copy3("<mover>", $2, "<mo>&RightVector;</mo></mover>");
+  itex2MML_free_string($2);
+};
+
+overarrow: OVERARROW closedTerm {
+  $$ = itex2MML_copy5("<mover>", $2, "<mo stretchy=\"true\">", $1 ,"</mo></mover>");
+  itex2MML_free_string($1);
+  itex2MML_free_string($2);
+};
+
+underarrow: UNDERARROW closedTerm {
+  $$ = itex2MML_copy5("<munder>", $2, "<mo stretchy=\"true\">", $1 ,"</mo></munder>");
+  itex2MML_free_string($1);
   itex2MML_free_string($2);
 };
 
@@ -1287,6 +1536,58 @@ ddddot: DDDDOT closedTerm {
   itex2MML_free_string($2);
 };
 
+accents: ACCENTS closedTerm {
+/*
+ see https://en.wikibooks.org/wiki/LaTeX/Special_Characters#Escaped_codes
+ jm.evers 29/6/2017
+*/
+ int pos=1;char *s1 = " ";
+ if( strstr($1,"\"") != NULL ){s1 = itex2MML_copy_string( "&uml;");}
+ else
+ if( strstr($1,"'") != NULL ){s1 = itex2MML_copy_string( "&acute;");}
+ else
+ if( strstr($1,"`") != NULL ){s1 = itex2MML_copy_string( "&grave;");}
+ else
+ if( strstr($1,"~") != NULL ){s1 = itex2MML_copy_string( "&tilde;");}
+ else
+ if( strstr($1,".") != NULL ){s1 = itex2MML_copy_string( "&dot;");}
+ else
+ if( strstr($1,"r") != NULL ){s1 = itex2MML_copy_string( "&ring;");}
+ else
+ if( strstr($1,"c") != NULL ){s1 = itex2MML_copy_string( "&cedil;");pos = 2;}
+ else
+ if( strstr($1,"=") != NULL ){s1 = itex2MML_copy_string( "&macr;");}
+ else
+ if( strstr($1,"k") != NULL ){s1 = itex2MML_copy_string( "&ogon;");pos = 2;}
+ else
+ if( strstr($1,"^") != NULL ){s1 = itex2MML_copy_string( "&#x0005E;");}
+ else
+ if( strstr($1,"b") != NULL ){s1 = itex2MML_copy_string( "&macr;");pos = 2;}
+ else
+ if( strstr($1,"v") != NULL ){s1 = itex2MML_copy_string( "&#x2c7;");}
+ else
+ if( strstr($1,"d") != NULL ){s1 = itex2MML_copy_string( "&dot;");pos = 2;}
+ else
+ if( strstr($1,"l") != NULL ){s1 = itex2MML_copy_string( "&#x142;");pos = 3;}
+ else
+ if( strstr($1,"o") != NULL ){s1 = itex2MML_copy_string( "&oslash;");pos = 3;}
+ else
+ if( strstr($1,"O") != NULL ){s1 = itex2MML_copy_string( "&Oslash;");pos = 3;}
+ else
+ if( strstr($1,"H") != NULL ){s1 = itex2MML_copy_string( "&#733;");}
+ else
+ if( strstr($1,"t") != NULL ){s1 = itex2MML_copy_string( "&#8256;");}
+ else
+ if( strstr($1,"u") != NULL ){s1 = itex2MML_copy_string( "&breve;");}
+
+ if( pos == 1 ){ $$ = itex2MML_copy5("<mover>",$2,"<mo stretchy=\"false\">",s1,"</mo></mover>");}
+ else
+ if( pos == 2 ){ $$ = itex2MML_copy5("<munder>",$2,"<mo stretchy=\"false\">",s1,"</mo></munder>");}
+ else
+ if( pos == 3 ){ $$ = itex2MML_copy3("<mo stretchy=\"false\">",s1,"</mo>");}
+ itex2MML_free_string(s1);
+ itex2MML_free_string($2);
+}
 tilde: TILDE closedTerm {
   $$ = itex2MML_copy3("<mover>", $2, "<mo stretchy=\"false\">&tilde;</mo></mover>");
   itex2MML_free_string($2);
@@ -1335,9 +1636,9 @@ mroot: SQRT OPTARGOPEN compoundTermList OPTARGCLOSE closedTerm {
 };
 
 raisebox: RAISEBOX TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
-  char * s1 = itex2MML_copy3("<mpadded voffset='", $2, "' height='");
-  char * s2 = itex2MML_copy3(s1, $3, "' depth='");
-  char * s3 = itex2MML_copy3(s2, $4, "'>");
+  char * s1 = itex2MML_copy3("<mpadded voffset=\"", $2, "\" height=\"");
+  char * s2 = itex2MML_copy3(s1, $3, "\" depth=\"");
+  char * s3 = itex2MML_copy3(s2, $4, "\">");
   $$ = itex2MML_copy3(s3, $5, "</mpadded>");
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1348,9 +1649,9 @@ raisebox: RAISEBOX TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
   itex2MML_free_string($5);
 }
 | RAISEBOX NEG TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
-  char * s1 = itex2MML_copy3("<mpadded voffset='-", $3, "' height='");
-  char * s2 = itex2MML_copy3(s1, $4, "' depth='");
-  char * s3 = itex2MML_copy3(s2, $5, "'>");
+  char * s1 = itex2MML_copy3("<mpadded voffset=\"-", $3, "\" height=\"");
+  char * s2 = itex2MML_copy3(s1, $4, "\" depth=\"");
+  char * s3 = itex2MML_copy3(s2, $5, "\">");
   $$ = itex2MML_copy3(s3, $6, "</mpadded>");
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1361,8 +1662,8 @@ raisebox: RAISEBOX TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
   itex2MML_free_string($6);
 }
 | RAISEBOX TEXTSTRING TEXTSTRING closedTerm {
-  char * s1 = itex2MML_copy3("<mpadded voffset='", $2, "' height='");
-  char * s2 = itex2MML_copy3(s1, $3, "' depth='depth'>");
+  char * s1 = itex2MML_copy3("<mpadded voffset=\"", $2, "\" height=\"");
+  char * s2 = itex2MML_copy3(s1, $3, "\" depth=\"depth\">");
   $$ = itex2MML_copy3(s2, $4, "</mpadded>");
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1371,9 +1672,9 @@ raisebox: RAISEBOX TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
   itex2MML_free_string($4);
 }
 | RAISEBOX NEG TEXTSTRING TEXTSTRING closedTerm {
-  char * s1 = itex2MML_copy3("<mpadded voffset='-", $3, "' height='");
-  char * s2 = itex2MML_copy3(s1, $4, "' depth='+");
-  char * s3 = itex2MML_copy3(s2, $3, "'>");
+  char * s1 = itex2MML_copy3("<mpadded voffset=\"-", $3, "\" height=\"");
+  char * s2 = itex2MML_copy3(s1, $4, "\" depth=\"+");
+  char * s3 = itex2MML_copy3(s2, $3, "\">");
   $$ = itex2MML_copy3(s3, $5, "</mpadded>");
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1383,8 +1684,8 @@ raisebox: RAISEBOX TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
   itex2MML_free_string($5);
 }
 | RAISEBOX TEXTSTRING closedTerm {
-  char * s1 = itex2MML_copy3("<mpadded voffset='", $2, "' height='+");
-  char * s2 = itex2MML_copy3(s1, $2, "' depth='depth'>");
+  char * s1 = itex2MML_copy3("<mpadded voffset=\"", $2, "\" height=\"+");
+  char * s2 = itex2MML_copy3(s1, $2, "\" depth=\"depth\">");
   $$ = itex2MML_copy3(s2, $3, "</mpadded>");
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1392,8 +1693,8 @@ raisebox: RAISEBOX TEXTSTRING TEXTSTRING TEXTSTRING closedTerm {
   itex2MML_free_string($3);
 }
 | RAISEBOX NEG TEXTSTRING closedTerm {
-  char * s1 = itex2MML_copy3("<mpadded voffset='-", $3, "' height='0pt' depth='+");
-  char * s2 = itex2MML_copy3(s1, $3, "'>");
+  char * s1 = itex2MML_copy3("<mpadded voffset=\"-", $3, "\" height=\"0pt\" depth=\"+");
+  char * s2 = itex2MML_copy3(s1, $3, "\">");
   $$ = itex2MML_copy3(s2, $4, "</mpadded>");
   itex2MML_free_string(s1);
   itex2MML_free_string(s2);
@@ -1458,6 +1759,10 @@ mathenv: BEGINENV MATRIX tableRowList ENDENV MATRIX {
   $$ = itex2MML_copy3("<mrow><mtable rowspacing=\"0.5ex\">", $3, "</mtable></mrow>");
   itex2MML_free_string($3);
 }
+|  BEGINENV EQUATION tableRowList ENDENV EQUATION {
+  $$ = itex2MML_copy3("<mrow><mtable rowspacing=\"0.8ex\">", $3, "</mtable></mrow>");
+  itex2MML_free_string($3);
+}
 |  BEGINENV GATHERED tableRowList ENDENV GATHERED {
   $$ = itex2MML_copy3("<mrow><mtable rowspacing=\"1.0ex\">", $3, "</mtable></mrow>");
   itex2MML_free_string($3);
@@ -1494,22 +1799,16 @@ mathenv: BEGINENV MATRIX tableRowList ENDENV MATRIX {
   $$ = itex2MML_copy3("<mrow><mtable columnalign=\"right left right left right left right left right left\" columnspacing=\"0em\">", $3, "</mtable></mrow>");
   itex2MML_free_string($3);
 }
-| BEGINENV ARRAY ARRAYALIGN ST columnAlignList END tableRowList ENDENV ARRAY {
-  char * s1 = itex2MML_copy3("<mtable rowspacing=\"0.5ex\" align=\"", $3, "\" columnalign=\"");
-  char * s2 = itex2MML_copy3(s1, $5, "\">");
-  $$ = itex2MML_copy3(s2, $7, "</mtable>");
-  itex2MML_free_string(s1);
-  itex2MML_free_string(s2);
+| BEGINENV ARRAY ARRAYALIGN ST TEX_OPTIONS END tableRowList ENDENV ARRAY {
+  $$= itex2MML_copy7("<mtable rowspacing=\"0.5ex\" align=\"", $3 ,"\"", $5 ," >",$7,"</mtable>");
   itex2MML_free_string($3);
   itex2MML_free_string($5);
   itex2MML_free_string($7);
 }
-| BEGINENV ARRAY ST columnAlignList END tableRowList ENDENV ARRAY {
-  char * s1 = itex2MML_copy3("<mtable rowspacing=\"0.5ex\" columnalign=\"", $4, "\">");
-  $$ = itex2MML_copy3(s1, $6, "</mtable>");
-  itex2MML_free_string(s1);
-  itex2MML_free_string($4);
-  itex2MML_free_string($6);
+| BEGINENV ARRAY ST TEX_OPTIONS END tableRowList ENDENV ARRAY {
+    $$= itex2MML_copy5("<mtable rowspacing=\"0.5ex\" ",$4," >", $6 ,"</mtable>");
+    itex2MML_free_string($4);
+    itex2MML_free_string($6);
 }
 | BEGINENV SVG XMLSTRING ENDSVG {
   $$ = itex2MML_copy3("<semantics><annotation-xml encoding=\"SVG1.1\">", $3, "</annotation-xml></semantics>");
@@ -1517,16 +1816,13 @@ mathenv: BEGINENV MATRIX tableRowList ENDENV MATRIX {
 }
 | BEGINENV SVG ENDSVG {
   $$ = itex2MML_copy_string(" ");
-};
-
-columnAlignList: columnAlignList COLUMNALIGN {
-  $$ = itex2MML_copy3($1, " ", $2);
-  itex2MML_free_string($1);
-  itex2MML_free_string($2);
 }
-| COLUMNALIGN {
-  $$ = itex2MML_copy_string($1);
-  itex2MML_free_string($1);
+| BEGINENV HTML XMLSTRING ENDHTML {
+    $$ = itex2MML_copy3("<semantics><annotation-xml encoding=\"application/xhtml+xml\">", $3, "</annotation-xml></semantics>");
+  itex2MML_free_string($3);
+}
+| BEGINENV HTML ENDHTML {
+  $$ = itex2MML_copy_string(" ");
 };
 
 substack: SUBSTACK MROWOPEN tableRowList MROWCLOSE {
@@ -1804,12 +2100,12 @@ static void itex2MML_keep_error (const char * msg)
 
 int itex2MML_html_filter (const char * buffer, unsigned long length)
 {
-  itex2MML_do_html_filter (buffer, length, 0);
+ return itex2MML_do_html_filter (buffer, length, 0);
 }
 
 int itex2MML_strict_html_filter (const char * buffer, unsigned long length)
 {
-  itex2MML_do_html_filter (buffer, length, 1);
+  return itex2MML_do_html_filter (buffer, length, 1);
 }
 
 int itex2MML_do_html_filter (const char * buffer, unsigned long length, const int forbid_markup)
@@ -2016,4 +2312,40 @@ int itex2MML_do_html_filter (const char * buffer, unsigned long length, const in
   itex2MML_error = save_error_fn;
 
   return result;
+}
+
+
+void replace_str(const char *str, const char *old, const char *new){
+/* http://creativeandcritical.net/str-replace-c/ */
+    char *ret, *r;
+    const char *p, *q;
+    size_t oldlen = strlen(old);
+    size_t count, retlen, newlen = strlen(new);
+
+    if (oldlen != newlen){
+  for (count = 0, p = str; (q = strstr(p, old)) != NULL; p = q + oldlen){
+      count++;
+      retlen = p - str + strlen(p) + count * (newlen - oldlen);
+  }
+    }
+    else
+    {
+  retlen = strlen(str);
+    }
+
+    if ((ret = malloc(retlen + 1)) == NULL){
+  ret = NULL;
+    }
+    else
+    {
+  for (r = ret, p = str; (q = strstr(p, old)) != NULL; p = q + oldlen) {
+      size_t l = q - p;
+      memcpy(r, p, l);
+      r += l;
+      memcpy(r, new, newlen);
+      r += newlen;
+  }
+  strcpy(r, p);
+    }
+    yylval = ret;
 }
