@@ -1194,9 +1194,6 @@ return ACCENTS;
 "\\barleftarrowrightarrow" {yylval = itex2MML_copy_string("&#x21B9;"); return MI;}
 "\\acwopencirclearrow" {yylval = itex2MML_copy_string("&#x21BA;"); return MO;}
 "\\cwopencirclearrow" {yylval = itex2MML_copy_string("&#x21BB;"); return MO;}
-"\\leftharpoondown" {yylval = itex2MML_copy_string("&#x21BD;"); return MO;}
-"\\rightharpoonup" {yylval = itex2MML_copy_string("&#x21C0;"); return MO;}
-"\\rightharpoondown" {yylval = itex2MML_copy_string("&#x21C1;"); return MO;}
 "\\updownarrows" {yylval = itex2MML_copy_string("&#x21C5;"); return MO;}
 "\\Nwarrow" {yylval = itex2MML_copy_string("&#x21D6;"); return MO;}
 "\\Nearrow" {yylval = itex2MML_copy_string("&#x21D7;"); return MO;}
@@ -1378,8 +1375,6 @@ return ACCENTS;
 "\\rParen" {yylval = itex2MML_copy_string("&#x2986;"); return RIGHTDELIM;}
 "\\llparenthesis" {yylval = itex2MML_copy_string("&#x2987;"); return LEFTDELIM;}
 "\\rrparenthesis" {yylval = itex2MML_copy_string("&#x2988;"); return RIGHTDELIM;}
-"\\llangle" {yylval = itex2MML_copy_string("&#x2989;"); return LEFTDELIM;}
-"\\rrangle" {yylval = itex2MML_copy_string("&#x298A;"); return RIGHTDELIM;}
 "\\lbrackubar" {yylval = itex2MML_copy_string("&#x298B;"); return LEFTDELIM;}
 "\\rbrackubar" {yylval = itex2MML_copy_string("&#x298C;"); return RIGHTDELIM;}
 "\\lbrackultick" {yylval = itex2MML_copy_string("&#x298D;"); return LEFTDELIM;}
@@ -1509,8 +1504,6 @@ return ACCENTS;
 "\\fint" {yylval=itex2MML_copy_string("&#x2AOF;"); return MO;}
 "\\diagup"  {yylval=itex2MML_copy_string("&#x2571;"); return OTHERDELIM;}
 "\\diagdown"    {yylval=itex2MML_copy_string("&#x2572;"); return OTHERDELIM;}
-"\\lmoustache" {yylval = itex2MML_copy_string("&#x23B0;"); return OTHERDELIM;}
-"\\rmoustache" {yylval = itex2MML_copy_string("&#x23B1;"); return OTHERDELIM;}
 "\\bigint"    |
 "\\bigintegral"     {return BIGINT;}
 "\\biggint"    |
